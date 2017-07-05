@@ -1,0 +1,53 @@
+body, html {
+    margin: 0;
+    background-color: #000000;
+}
+
+.lingo {
+    background: linear-gradient(to bottom, #D3D3D3 0%, #1D1D1D 100%);
+    border-collapse: collapse;
+}
+
+.lingo > tbody > tr > td {
+    padding: 0;
+    border-color: #5d5d5d;
+    border-width: 3px;
+    border-style: solid;
+    background: rgba(0, 122, 229, 0.7) !important;
+}
+
+.lingo-letter {
+    text-align: center;
+    vertical-align: middle;
+
+    font-family: "Microsoft Sans Serif", Arial, sans-serif;
+    font-size: 35px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
+
+    color: white;
+    background-color: transparent;
+
+    width: 50px;
+    height: 50px;
+    box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.5);
+}
+
+.lingo-letter > div {
+    width: 50px;
+    height: 50px;
+}
+
+.lingo-letter > div:focus {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.lingo-letter-red {
+    background: rgba(219, 0, 0, 0.7) !important;
+}
+
+.lingo-letter-yellow > div {
+    background: rgba(255, 248, 45, 0.7) !important;
+    border-radius: 100%;
+}
