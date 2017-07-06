@@ -18,9 +18,9 @@ var Lingo = {
                 $(this).html(".");
                 $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).focus();
             } else if (e.keyCode === 74) { // j
-                if($(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html() === "I"){
+                if($(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html().trim() === "I"){
                     $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html("IJ");
-                } else if ($(this).html() === "I" && $(this).is(":last-child")) {
+                } else if ($(this).html().trim() === "I" && $(this).is(":last-child")) {
                     $(this).html("IJ");
                 } else {
                     $(this).html(String.fromCharCode(e.keyCode));
@@ -53,7 +53,7 @@ var Lingo = {
     check: function () {
         var word = [];
         $('.lingo-current > td > div > div').each(function(i, selected){
-            word[i] = $(selected).text();
+            word[i] = $(selected).html().trim();
         });
         $.post("play/check", { word: word.join("") }, function (data) {
             var json = JSON.parse(data);
@@ -67,11 +67,12 @@ var Lingo = {
                         $(selected).addClass("lingo-letter-red");
                     }
                 });
-                if(json.win){
-                    alert("Congratulations!");
-                }
             }
-            Lingo.nextGuess();
+            if(json.win){
+                alert("Congratulations!");
+            } else {
+                Lingo.nextGuess();
+            }
         });
     },
 

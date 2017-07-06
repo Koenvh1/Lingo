@@ -16,7 +16,7 @@ class LingoController
     public function view(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         $database = new \Database();
-        $_SESSION["word"] = $database->getRandomWord($args["letters"], $request->getAttribute("language"));
+        //$_SESSION["word"] = $database->getRandomWord($args["letters"], $request->getAttribute("language"));
 
         $aidLetters = [];
         for($i = 0; $i < $args["letters"]; $i++) {
@@ -53,15 +53,26 @@ class LingoController
             for ($i = 0; $i < strlen($rightWord); $i++) {
                 if ($guess[$i] == $rightWord[$i]) {
                     $resultArray["letters"][$i] = 2;
-                } elseif (in_array($guess[$i], $rightWordArray) && $guess[strpos($rightWord, $guess[$i])] !== $rightWord[strpos($rightWord, $guess[$i])]) {
+                    unset($rightWordArray[array_search($guess[$i], $rightWordArray)]);
+                }
+            }
+
+            for ($i = 0; $i < strlen($rightWord); $i++) {
+                if ($guess[$i] != $rightWord[$i] && in_array($guess[$i], $rightWordArray)) {
                     $resultArray["letters"][$i] = 1;
                     unset($rightWordArray[array_search($guess[$i], $rightWordArray)]);
-                } else {
+                }
+            }
+            //var_dump($rightWordArray);
+
+            for ($i = 0; $i < strlen($rightWord); $i++) {
+                if(!array_key_exists($i, $resultArray["letters"])) {
                     $resultArray["letters"][$i] = 0;
                 }
             }
+
         } else {
-            $resultArray["error"] = "This word does not exist!";
+            $resultArray["error"] = $guess . " does not exist!";
         }
 
         if($rightWord == $guess){

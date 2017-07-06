@@ -9,8 +9,8 @@
 </head>
 <body>
 {{ $_SESSION["word"] }}
-<div class="container">
-    <table class="lingo">
+<div>
+    <table class="lingo" style="margin: auto">
         <tr class="lingo-current">
             @for($i = 0; $i < $letters; $i++)
                 <td>
