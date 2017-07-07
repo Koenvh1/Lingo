@@ -13,8 +13,14 @@ function parse($inputFile, $sane)
         while (($line = fgets($handle)) !== false) {
             $line = trim($line);
             echo $line . "\n";
+            if(empty($line)) {
+                continue;
+            }
             if(strpos($line, " ") !== false){
-                $line = explode(" ", $line)[1];
+                $line = explode(" ", $line)[0];
+            }
+            if(strpos($line, ",") !== false){
+                $line = explode(",", $line)[0];
             }
             if (strpos($line, "-") !== false || strpos($line, " ") !== false || strpos($line, "'") !== false || strpos($line, ".") !== false) {
                 continue;
