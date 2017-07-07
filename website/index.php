@@ -95,15 +95,20 @@ $app->add($languageMiddleware);
 
 
 // Register default routes
+/*
 $app->get("/[home]", function (ServerRequestInterface $request, ResponseInterface $response, $args) {
     return $this->view->render($response, "home", [
         "language" => $request->getAttribute("language"),
         "page" => ltrim($request->getUri()->getPath())
     ]);
 });
-$app->get("/play/{letters}", \Controllers\LingoController::class . ":view");
+*/
+
+$app->get("/", \Controllers\LingoController::class . ":view");
 
 $app->post("/play/check", \Controllers\LingoController::class . ":check");
+$app->post("/play/init", \Controllers\LingoController::class . ":init");
+$app->post("/play/right", \Controllers\LingoController::class . ":right");
 
 // Run app
 $app->run();
