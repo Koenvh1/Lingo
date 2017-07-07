@@ -1,7 +1,7 @@
 <?php
 # word,language,characters,sane
 
-parse("raw_choice.txt", true);
+//parse("raw_choice.txt", true);
 parse("raw_valid.txt", false);
 
 function parse($inputFile, $sane)
