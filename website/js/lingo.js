@@ -8,21 +8,17 @@ var Lingo = {
     previousContent: null,
     enterPressed: true,
 
+    /**
+     * Initialize the object
+     */
     init: function () {
-        $(".lingo-letter > div").off("click").off("keydown").off("keyup");
-        $(".lingo > tbody > tr").html("");
-        for(var i = 0; i < Lingo.letters; i++) {
-            $(".lingo > tbody > tr").append("" +
-                "<td>" +
-                "<div class='lingo-letter'>" +
-                "<div></div>" +
-                "</div>" +
-                "</td>");
-        }
-        $(".lingo-current").removeClass("lingo-current");
+        Lingo.reset();
 
         $(".lingo-letter > div").click(function () {
             $(this).focus();
+        });
+
+        $(".lingo-letter > div").focus(function () {
             Lingo.previousContent = $(this).html().trim().toUpperCase();
         });
 
@@ -34,7 +30,7 @@ var Lingo = {
         $(".lingo-letter > div").bind("input keyup", function (e) {
             if(typeof e.keyCode === "undefined" || e.keyCode === 229) {
                 var difference = getDifference(Lingo.previousContent, $(this).html().trim().toUpperCase());
-                if(difference.trim().length === 0) {
+                if(difference.trim().length === 0 || $(this).html().trim().indexOf("<BR>") !== -1) {
                     $(this).html(Lingo.previousContent);
                 } else {
                     e.keyCode = difference.charCodeAt(0);
@@ -101,55 +97,22 @@ var Lingo = {
         }
 
         $(".lingo-progress").outerWidth($(".lingo").outerWidth());
-
-        /*
-        if (annyang) {
-
-            function enterLetter(letter) {
-                var currentIndex = parseInt($(this).parent().parent().index());
-                $(this).html(letter.toUpperCase());
-                $(".lingo-current > td > .lingo-letter > div").eq(currentIndex + 1).focus();
-                console.log(letter);
-            }
-            // Let's define a command.
-            var commands = {
-                'A': function() { enterLetter("A") },
-                'B': function() { enterLetter("B") },
-                'C': function() { enterLetter("C") },
-                'D': function() { enterLetter("D") },
-                'E': function() { enterLetter("E") },
-                'F': function() { enterLetter("F") },
-                'G': function() { enterLetter("G") },
-                'H': function() { enterLetter("H") },
-                'I': function() { enterLetter("I") },
-                'J': function() { enterLetter("J") },
-                'K': function() { enterLetter("K") },
-                'L': function() { enterLetter("L") },
-                'M': function() { enterLetter("M") },
-                'N': function() { enterLetter("N") },
-                'O': function() { enterLetter("O") },
-                'P': function() { enterLetter("P") },
-                'Q': function() { enterLetter("Q") },
-                'R': function() { enterLetter("R") },
-                'S': function() { enterLetter("S") },
-                'T': function() { enterLetter("T") },
-                'U': function() { enterLetter("U") },
-                'V': function() { enterLetter("V") },
-                'W': function() { enterLetter("W") },
-                'X': function() { enterLetter("X") },
-                'Y': function() { enterLetter("Y") },
-                'Z': function() { enterLetter("Z") },
-            };
-
-            //annyang.setLanguage("nl-NL");
-            // Add our commands to annyang
-            annyang.addCommands(commands);
-
-            // Start listening.
-            annyang.start();
-        }
-        */
     },
+
+    reset: function () {
+        $(".lingo-letter > div").off("click").off("keydown").off("keyup").off("focus");
+        $(".lingo > tbody > tr").html("");
+        for(var i = 0; i < Lingo.letters; i++) {
+            $(".lingo > tbody > tr").append("" +
+                "<td>" +
+                "<div class='lingo-letter'>" +
+                "<div></div>" +
+                "</div>" +
+                "</td>");
+        }
+        $(".lingo-current").removeClass("lingo-current");
+    },
+
     setSize: function (size) {
         Lingo.size = size;
         $(".lingo-letter, .lingo-letter > div").css({
@@ -258,11 +221,11 @@ var Lingo = {
                 width: "100%"
             }, Lingo.time * 1000, "linear", function () {
                 Lingo.enterPressed = true;
+                setTimeout(function() {
+                    Lingo.nextGuess();
+                }, 100);
                 var audio = new Audio("./audio/timeup.mp3");
                 audio.play();
-                audio.onended = function() {
-                    Lingo.nextGuess();
-                };
             });
         }
     },
@@ -287,7 +250,55 @@ var Lingo = {
             $("#overlay").outerWidth($(".lingo").outerWidth());
             $("#overlay").fadeIn();
         });
-    }
+    },
+
+    activateVoice: function () {
+        if(annyang) {
+            if (Lingo.language === "nl") {
+                annyang.setLanguage("nl-NL");
+            } else if (Lingo.language === "de") {
+                annyang.setLanguage("de-DE");
+            }
+            // Add our commands to annyang
+            annyang.addCommands({
+                "help": function () {
+                    console.log("HELP");
+                }
+            });
+            annyang.debug(true);
+
+            annyang.addCallback("result", function (e) {
+                if (typeof e !== "undefined") {
+                    for (var i = 0; i < 5; i++) {
+                        var wordArray = e[i].split(" ").slice(-6);
+                        console.log(wordArray);
+                        var success = true;
+                        if (wordArray.length === parseInt(Lingo.letters)) {
+                            for (var j = 0; j < parseInt(Lingo.letters); j++) {
+                                if (wordArray[j].length !== 1) {
+                                    success = false;
+                                }
+                            }
+                        } else {
+                            success = false;
+                        }
+                        if (success) {
+                            $('.lingo-current > td > div > div').each(function (k, selected) {
+                                $(selected).html(wordArray[k].toUpperCase());
+                            });
+                            Lingo.check();
+                            break;
+                        }
+                    }
+                    console.log(e);
+                }
+            });
+            // Start listening.
+            annyang.start();
+        } else {
+            alert("Voice control not available");
+        }
+    },
 };
 
 function getDifference(a, b)

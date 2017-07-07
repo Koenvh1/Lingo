@@ -93,6 +93,13 @@
                 </div>
             </div>
             <div class="form-group">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="voice"> <?php echo L::menu_voice; ?>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
                 <button type="submit" class="btn btn-primary btn-lg"><?php echo L::menu_start; ?></button>
             </div>
         </form>
@@ -130,6 +137,9 @@
         Lingo.language = $("input[name=language]:checked").val();
         Lingo.time = $("input[name=time]:checked").val();
         Lingo.letters = $("input[name=letters]:checked").val();
+        if($("input[name=voice]").is(":checked")) {
+            Lingo.activateVoice();
+        }
         $.post("play/init", {amount: $("input[name=aidLetters]:checked").val(), first: $("input[name=first]").is(":checked"), language: Lingo.language, letters: Lingo.letters}, function (data) {
             Lingo.rightLetters = JSON.parse(data);
             $("#menu").hide();
