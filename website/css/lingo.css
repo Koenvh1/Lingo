@@ -47,6 +47,11 @@
     border-radius: 100%;
 }
 
+.lingo-letter-win {
+    background-color: rgba(255, 255, 255, 1) !important;
+    transition: background-color 150ms linear;
+}
+
 .lingo-progress {
     background-color: #282828;
     border-color: #5d5d5d;

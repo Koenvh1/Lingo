@@ -6,7 +6,7 @@ var Lingo = {
     size: 50,
     mobile: false,
     previousContent: null,
-    enterPressed: false,
+    enterPressed: true,
 
     init: function () {
         $(".lingo-letter > div").off("click").off("keydown").off("keyup");
@@ -184,15 +184,11 @@ var Lingo = {
                     /*
                     $('.lingo-current > td > div').each(function(i, selected){
                         setTimeout(function () {
-                            setInterval(function () {
-                                $(selected).animate({backgroundColor: "rgba(255, 255, 255, 1)"});
-                            }, 500);
-                            setTimeout(function () {
-                                setInterval(function () {
-                                    $(selected).animate({backgroundColor: "rgba(219, 0, 0, 0.7)"});
-                                }, 500);
-                            }, 500);
-                        }, i * 50);
+                            $(selected).addClass("lingo-letter-win");
+                        }, (parseInt(Lingo.letters) * 100) - (i * 100));
+                        setTimeout(function () {
+                            $(selected).removeClass("lingo-letter-win");
+                        }, (2 * parseInt(Lingo.letters) * 100) - (i * 100));
                     });
                     */
                     Lingo.nextWord(true);
@@ -261,6 +257,7 @@ var Lingo = {
             $(".lingo-progress-bar").animate({
                 width: "100%"
             }, Lingo.time * 1000, "linear", function () {
+                Lingo.enterPressed = true;
                 var audio = new Audio("./audio/timeup.mp3");
                 audio.play();
                 audio.onended = function() {
@@ -284,7 +281,7 @@ var Lingo = {
             $(".lingo-right").html(json.word);
             $("#overlay").css({
                 top: $(".lingo").offset().top,
-                left: $(".lingo").offset().left,
+                left: "calc(50% - " + ($(".lingo").outerWidth() / 2) + "px)",
                 height: $(".lingo").outerHeight() + $(".lingo-progress").outerHeight()
             });
             $("#overlay").outerWidth($(".lingo").outerWidth());
