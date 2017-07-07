@@ -1,6 +1,7 @@
 <?php
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Slim\Views\PhpRenderer;
 
 session_start();
 
@@ -9,21 +10,11 @@ require_once "../includes.php";
 $app = new \Slim\App(["settings" => [
     "displayErrorDetails" => true,
     "addContentLengthHeader" => false,
-    "renderer"            => [
-        "blade_template_path" => "../templates", // String or array of multiple paths
-        "blade_cache_path"    => "../cache", // Mandatory by default, though could probably turn caching off for development
-    ],
 ]]);
 
 $container = $app->getContainer();
 
-// Define blade template engine
-$container["view"] = function ($container) {
-    return new \Slim\Views\Blade(
-        $container["settings"]["renderer"]["blade_template_path"],
-        $container["settings"]["renderer"]["blade_cache_path"]
-    );
-};
+$container["renderer"] = new PhpRenderer("../templates");
 
 /*
 $container["notFoundHandler"] = function ($container) {
@@ -39,8 +30,11 @@ $container["notFoundHandler"] = function ($container) {
 };
 */
 
+$i18n = new i18n('../lang/lang_{LANGUAGE}.ini', '../cache/', 'en');
+
 // Language middleware
 $languageMiddleware = function (ServerRequestInterface $request, ResponseInterface $response, callable $next) {
+    global $i18n;
     $requestTarget = ltrim($request->getUri()->getPath(), "/");
     if(substr($requestTarget, 0,2) == "en"){
         $language = "en";
@@ -87,6 +81,8 @@ $languageMiddleware = function (ServerRequestInterface $request, ResponseInterfa
             }
         }
     }
+    $i18n->setForcedLang($language);
+    $i18n->init();
     setcookie("language", $language, time() + (86400 * 365), "/");
     $request = $request->withAttribute("language", $language);
     return $next($request, $response);

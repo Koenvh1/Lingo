@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo $language; ?>">
 <head>
-    <base href="{{ BASE_URL }}">
     <meta charset="UTF-8">
     <title>Lingo</title>
     <link rel="stylesheet" href="css/bootstrap.css">
@@ -17,84 +16,84 @@
         <h1>Lingo</h1>
         <form class="form" action="javascript:submitForm();">
             <div class="form-group">
-                <h5>Language:</h5>
+                <h5><?php echo L::menu_language; ?></h5>
                 <div class="form-check form-check-inline">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="language" value="nl" checked> Dutch
+                        <input class="form-check-input" type="radio" name="language" value="nl" checked> <?php echo L::menu_dutch; ?>
                     </label>
                 </div>
                 <div class="form-check form-check-inline">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="language" value="en" disabled> English
+                        <input class="form-check-input" type="radio" name="language" value="en"> <?php echo L::menu_english; ?>
                     </label>
                 </div>
                 <div class="form-check form-check-inline">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="language" value="de"> German
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <h5>Letters:</h5>
-                <div class="form-check form-check-inline">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="letters" value="5"> 5 letters
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="letters" value="6" checked> 6 letters
+                        <input class="form-check-input" type="radio" name="language" value="de"> <?php echo L::menu_german; ?>
                     </label>
                 </div>
             </div>
             <div class="form-group">
-                <h5>Aid letters:</h5>
+                <h5><?php echo L::menu_letters; ?></h5>
                 <div class="form-check form-check-inline">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="aidLetters" value="1"> 1 aid letter
+                        <input class="form-check-input" type="radio" name="letters" value="5"> <?php echo L::menu_letters5; ?>
                     </label>
                 </div>
                 <div class="form-check form-check-inline">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="aidLetters" value="2" checked> 2 aid letters
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" name="first" checked> First letter always given
+                        <input class="form-check-input" type="radio" name="letters" value="6" checked> <?php echo L::menu_letters6; ?>
                     </label>
                 </div>
             </div>
             <div class="form-group">
-                <h5>Time:</h5>
+                <h5><?php echo L::menu_aidLetters; ?></h5>
                 <div class="form-check form-check-inline">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="time" value="5"> 5 sec
+                        <input class="form-check-input" type="radio" name="aidLetters" value="1"> <?php echo L::menu_aidLetters1; ?>
                     </label>
                 </div>
                 <div class="form-check form-check-inline">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="time" value="15" checked> 15 sec
+                        <input class="form-check-input" type="radio" name="aidLetters" value="2" checked> <?php echo L::menu_aidLetters2; ?>
                     </label>
                 </div>
                 <div class="form-check form-check-inline">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="time" value="30"> 30 sec
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="time" value="60"> 1 min
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="time" value="0"> unlimited
+                        <input class="form-check-input" type="checkbox" name="first" checked> <?php echo L::menu_aidFirst; ?>
                     </label>
                 </div>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-lg">Start</button>
+                <h5><?php echo L::menu_time; ?></h5>
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="time" value="5"> <?php echo L::menu_sec5; ?>
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="time" value="15" checked> <?php echo L::menu_sec15; ?>
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="time" value="30"> <?php echo L::menu_sec30; ?>
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="time" value="60"> <?php echo L::menu_min1; ?>
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="time" value="0"> <?php echo L::menu_unlimited; ?>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-lg"><?php echo L::menu_start; ?></button>
             </div>
         </form>
     </div>
@@ -117,7 +116,7 @@
     <span>
         <span class="lingo-end-message">The right word was:</span><br>
         <span class="lingo-right"></span><br>
-        <button class="btn btn-primary btn-lg" onclick="showMenu();">Menu</button> <button class="btn btn-primary btn-lg" onclick="submitForm();">Next</button>
+        <button class="btn btn-primary btn-lg" onclick="showMenu();"><?php echo L::overlay_menu; ?></button> <button class="btn btn-primary btn-lg" onclick="submitForm();"><?php echo L::overlay_next; ?></button>
     </span>
 </div>
 <script src="js/jquery-3.2.1.js"></script>

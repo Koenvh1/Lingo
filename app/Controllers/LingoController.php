@@ -15,23 +15,9 @@ class LingoController
 
     public function view(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        $database = new \Database();
-        //$_SESSION["word"] = $database->getRandomWord($args["letters"], $request->getAttribute("language"));
-
-        $aidLetters = [];
-        for($i = 0; $i < $args["letters"]; $i++) {
-            if($i == 0) {
-                $aidLetters[$i] = str_split($_SESSION["word"])[$i];
-            } else {
-                $aidLetters[$i] = null;
-            }
-        }
-
-        return $this->container->view->render($response, "play", [
+        return $this->container->renderer->render($response, "/play.php", [
             "language" => $request->getAttribute("language"),
-            "page" => ltrim($request->getUri()->getPath()),
-            "letters" => $args["letters"],
-            "aidLetters" => $aidLetters
+            "page" => ltrim($request->getUri()->getPath())
         ]);
     }
 
@@ -39,6 +25,9 @@ class LingoController
     {
         $guess = strtoupper($_POST["word"]);
         $rightWord = strtoupper($_SESSION["word"]);
+
+        $language = $_POST["language"];
+
         $resultArray = [
             "letters" => [],
             "error" => null,
@@ -46,7 +35,11 @@ class LingoController
         ];
 
         $database = new \Database();
-        if($database->wordExists($guess, $request->getAttribute("language"))) {
+        if($database->wordExists($guess, $language)) {
+            if($request->getAttribute("language") == "nl") {
+                $guess = str_replace("IJ", "|", $guess);
+                $rightWord = str_replace("IJ", "|", $rightWord);
+            }
 
             $rightWordArray = str_split($rightWord);
 
@@ -72,7 +65,7 @@ class LingoController
             }
 
         } else {
-            $resultArray["error"] = $guess . " does not exist!";
+            $resultArray["error"] = \L::game_doesNotExist($guess);
         }
 
         if($rightWord == $guess){
@@ -80,5 +73,57 @@ class LingoController
         }
 
         return $response->getBody()->write(json_encode($resultArray));
+    }
+
+    public function right(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $resultArray = [
+            "word" => $_SESSION["word"],
+            "title" => \L::game_theRightWordIs
+        ];
+        return $response->getBody()->write(json_encode($resultArray));
+    }
+
+    public function init(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $language = $_POST["language"];
+        $letters = $_POST["letters"];
+
+        $database = new \Database();
+        $_SESSION["word"] = $database->getRandomWord($letters, $language); //"BIJTEND";
+
+        $aidLetters = [];
+        if($language == "nl") {
+            $word = str_replace("IJ", "|", $_SESSION["word"]);
+        } else {
+            $word = $_SESSION["word"];
+        }
+
+        $amount = $_POST["amount"];
+        $first = $_POST["first"];
+        $wordArray = str_split($word);
+        $randomLetters = array_rand($wordArray, $amount);
+        if($first && !in_array(0, $randomLetters)){
+            array_pop($randomLetters);
+            $randomLetters[] = 0;
+        }
+        //var_dump($wordArray);
+        //var_dump($randomLetters);
+
+        foreach($randomLetters as $letter) {
+            $aidLetters[$letter] = ($wordArray[$letter] == "|" ? "IJ" : $wordArray[$letter]);
+        }
+
+        /*
+        for($i = 0; $i < $amount; $i++) {
+            if($i == 0) {
+                $aidLetters[$i] = (str_split($word)[$i] == "|" ? "IJ" : str_split($word)[$i]);
+            } else {
+                $aidLetters[$i] = null;
+            }
+        }
+        */
+
+        return $response->getBody()->write(json_encode($aidLetters));
     }
 }
