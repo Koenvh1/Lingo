@@ -6,6 +6,7 @@ var Lingo = {
     size: 50,
     mobile: false,
     previousContent: null,
+    enterPressed: false,
 
     init: function () {
         $(".lingo-letter > div").off("click").off("keydown").off("keyup");
@@ -67,7 +68,10 @@ var Lingo = {
             } else if (e.keyCode === 39) { //arrow right
                 $(".lingo-current > td > .lingo-letter > div").eq(currentIndex + 1).focus();
             } else if (e.keyCode === 13) { //enter
-                Lingo.check();
+                if(!Lingo.enterPressed) {
+                    Lingo.enterPressed = true;
+                    Lingo.check();
+                }
             }
         });
 
@@ -238,6 +242,7 @@ var Lingo = {
             }
             $('.lingo-current > td > div > div').eq(0).focus();
 
+            Lingo.enterPressed = false;
             Lingo.startTimer();
         } else {
             Lingo.nextWord(false);
