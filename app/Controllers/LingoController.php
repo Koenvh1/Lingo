@@ -100,7 +100,7 @@ class LingoController
         }
 
         $amount = $_POST["amount"];
-        $first = $_POST["first"];
+        $first = ($_POST["first"] == "true");
         $wordArray = str_split($word);
         $randomLetters = array_rand($wordArray, $amount);
         if(!is_array($randomLetters)) {
