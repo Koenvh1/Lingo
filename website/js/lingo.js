@@ -19,7 +19,7 @@ var Lingo = {
         });
 
         $(".lingo-letter > div").focus(function () {
-            Lingo.previousContent = $(this).html().trim().toUpperCase();
+            Lingo.previousContent = $(this).html().trim().toUpperCase(); //Set previousContent for mobile (to recognise the new character)
         });
 
         $(".lingo-letter > div").keydown(function (e) {
@@ -28,17 +28,17 @@ var Lingo = {
         });
 
         $(".lingo-letter > div").bind("input keyup", function (e) {
-            if(typeof e.keyCode === "undefined" || e.keyCode === 229) {
-                var difference = getDifference(Lingo.previousContent, $(this).html().trim().toUpperCase());
+            if(typeof e.keyCode === "undefined" || e.keyCode === 229) { //If mobile
+                var difference = getDifference(Lingo.previousContent, $(this).html().trim().toUpperCase()); //Get new character
                 if(difference.trim().length === 0 || $(this).html().trim().indexOf("<BR>") !== -1) {
                     $(this).html(Lingo.previousContent);
                 } else {
-                    e.keyCode = difference.charCodeAt(0);
+                    e.keyCode = difference.charCodeAt(0); //Set keycode from new character
                 }
             }
             e.preventDefault();
             //console.log("keyCode: " + e.keyCode);
-            var currentIndex = parseInt($(this).parent().parent().index());
+            var currentIndex = parseInt($(this).parent().parent().index()); //Get current square index in row
 
             if (e.keyCode === 46) { //delete
                 $(this).html(".");
@@ -65,7 +65,7 @@ var Lingo = {
                 $(".lingo-current > td > .lingo-letter > div").eq(currentIndex + 1).focus();
             } else if (e.keyCode === 13) { //enter
                 if(!Lingo.enterPressed) {
-                    Lingo.enterPressed = true;
+                    Lingo.enterPressed = true; //Prevent multiple enters firing
                     Lingo.check();
                 }
             }
@@ -80,19 +80,20 @@ var Lingo = {
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
             console.log("Mobile on");
             Lingo.mobile = true;
-            $("div[contenteditable=false]").prop("contenteditable", true);
+            $("div[contenteditable=false]").prop("contenteditable", true); //Make editable for mobile keyboard
 
-            var squareSize = (screen.width - ((parseInt(Lingo.letters) + 2) * 3)) / Lingo.letters;
+            var squareSize = (screen.width - ((parseInt(Lingo.letters) + 2) * 3)) / Lingo.letters; //Set width to screen width
             //console.log(squareSize);
             Lingo.setSize(squareSize);
 
+            //Fixed time bar to the top of the page
             $(".lingo-progress").css({
                 position: "fixed",
                 top: "0",
                 left: "0",
             });
             $(".lingo").css({
-                "margin-top": $(".lingo-progress").height() + 4
+                "margin-top": $(".lingo-progress").outerHeight()
             });
         }
 
@@ -125,17 +126,18 @@ var Lingo = {
     check: function () {
         Lingo.stopTimer();
 
-        var word = [];
+        var word = []; //Get all squares and put them in an array
         $('.lingo-current > td > div > div').each(function(i, selected){
             word[i] = $(selected).html().trim();
         });
         $.post("play/check", { word: word.join(""), language: Lingo.language }, function (data) {
             var json = JSON.parse(data);
-            if(json.error != null){
+            if(json.error !== null){
                 var audio = new Audio("./audio/timeup.mp3");
                 audio.play();
                 alert(json.error);
             } else {
+                //Show state of each square, one by one, 220ms after each other
                 $('.lingo-current > td > div').each(function(i, selected){
                     setTimeout(function () {
                         Lingo.showCheck(json, i, selected);
@@ -178,33 +180,33 @@ var Lingo = {
     },
 
     nextGuess: function () {
-        var index = $(".lingo-current").index();
-        if(index !== -1){
-            $('.lingo-current > td > div > div').removeAttr("contenteditable").removeAttr("tabindex");
+        var index = $(".lingo-current").index(); //Current row index
+        if(index !== -1){ //Check first guess (initializer)
+            $('.lingo-current > td > div > div').removeAttr("contenteditable").removeAttr("tabindex"); //Disable focus and editing
 
-            $('.lingo-current > td > div > div').each(function (i, selected) {
+            $('.lingo-current > td > div > div').each(function (i, selected) { //Add right letters to right letters array so they appear automatically next guess
                 if ($(selected).parent().hasClass("lingo-letter-red")) {
                     Lingo.rightLetters[i] = $(selected).html().trim().toUpperCase();
                 }
             });
-            $(".lingo-current").removeClass("lingo-current");
+            $(".lingo-current").removeClass("lingo-current"); //Remove current row
         }
-        if(index + 1 < $(".lingo > tbody > tr").length) {
+        if(index + 1 < $(".lingo > tbody > tr").length) { //If not the last row
             index = index + 1;
-            $('.lingo > tbody > tr').eq(index).addClass("lingo-current");
-            $('.lingo-current > td > div > div').prop("contenteditable", false).prop("tabindex", 0).prop("autocomplete", "off").prop("spellcheck", false).prop("autocorrect", "off").html(".");
-            $('.lingo-current > td > div > div').each(function(i, selected){
+            $('.lingo > tbody > tr').eq(index).addClass("lingo-current"); //Make current
+            $('.lingo-current > td > div > div').prop("contenteditable", false).prop("tabindex", 0).attr("autocomplete", "off").prop("spellcheck", false).attr("autocorrect", "off").html(".");
+            $('.lingo-current > td > div > div').each(function(i, selected){ //Set right letters
                  $(selected).html(Lingo.rightLetters[i]);
             });
             if(Lingo.mobile) {
                 $("div[contenteditable=false]").prop("contenteditable", true);
             }
-            $('.lingo-current > td > div > div').eq(0).focus();
+            $('.lingo-current > td > div > div').eq(0).focus(); //Focus first letter
 
-            Lingo.enterPressed = false;
+            Lingo.enterPressed = false; //Enable enter again
             Lingo.startTimer();
         } else {
-            Lingo.nextWord(false);
+            Lingo.nextWord(false); //Game over
         }
     },
 
@@ -268,9 +270,9 @@ var Lingo = {
             annyang.debug(true);
 
             annyang.addCallback("result", function (e) {
-                if (typeof e !== "undefined") {
-                    for (var i = 0; i < 5; i++) {
-                        var wordArray = e[i].split(" ").slice(-6);
+                for (var i = 0; i < 5; i++) {
+                    if (typeof e[i] !== "undefined") {
+                        var wordArray = e[i].split(" ").slice(parseInt(Lingo.letters) * -1); //Get the last x single letters
                         console.log(wordArray);
                         var success = true;
                         if (wordArray.length === parseInt(Lingo.letters)) {
@@ -283,15 +285,17 @@ var Lingo = {
                             success = false;
                         }
                         if (success) {
+                            //var actualWord = wordArray[(parseInt(Lingo.letters) * -1) - 1];
                             $('.lingo-current > td > div > div').each(function (k, selected) {
                                 $(selected).html(wordArray[k].toUpperCase());
                             });
+                            Lingo.enterPressed = true;
                             Lingo.check();
                             break;
                         }
                     }
-                    console.log(e);
                 }
+                console.log(e);
             });
             // Start listening.
             annyang.start();
