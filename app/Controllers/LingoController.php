@@ -103,6 +103,9 @@ class LingoController
         $first = $_POST["first"];
         $wordArray = str_split($word);
         $randomLetters = array_rand($wordArray, $amount);
+        if(!is_array($randomLetters)) {
+            $randomLetters = [$randomLetters];
+        }
         if($first && !in_array(0, $randomLetters)){
             array_pop($randomLetters);
             $randomLetters[] = 0;
