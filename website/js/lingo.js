@@ -277,8 +277,11 @@ var Lingo = {
                         var success = true;
                         if (wordArray.length === parseInt(Lingo.letters)) {
                             for (var j = 0; j < parseInt(Lingo.letters); j++) {
-                                if (wordArray[j].length !== 1) {
+                                if (wordArray[j].length !== 1 && wordArray.indexOf("ij") === -1) {
                                     success = false;
+                                }
+                                if(wordArray.indexOf("ij") !== -1) {
+                                    wordArray[j] = "ij";
                                 }
                             }
                         } else {
