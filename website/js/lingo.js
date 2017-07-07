@@ -46,8 +46,10 @@ var Lingo = {
             if (e.keyCode === 46) { //delete
                 $(this).html(".");
             } else if (e.keyCode === 8) { //backspace
+                if($(this).html().trim() === "."){
+                    $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html(".").focus();
+                }
                 $(this).html(".");
-                $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).focus();
             } else if (e.keyCode === 74 && Lingo.language === "nl") { // j
                 if($(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html().trim() === "I"){
                     $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html("IJ");
