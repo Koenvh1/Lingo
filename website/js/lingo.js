@@ -272,16 +272,14 @@ var Lingo = {
             annyang.addCallback("result", function (e) {
                 for (var i = 0; i < 5; i++) {
                     if (typeof e[i] !== "undefined") {
+                        e[i] = e[i].replace("lange ij", "|");
                         var wordArray = e[i].split(" ").slice(parseInt(Lingo.letters) * -1); //Get the last x single letters
                         console.log(wordArray);
                         var success = true;
                         if (wordArray.length === parseInt(Lingo.letters)) {
                             for (var j = 0; j < parseInt(Lingo.letters); j++) {
-                                if (wordArray[j].length !== 1 && wordArray.indexOf("ij") === -1) {
+                                if (wordArray[j].length !== 1) {
                                     success = false;
-                                }
-                                if(wordArray.indexOf("ij") !== -1) {
-                                    wordArray[j] = "ij";
                                 }
                             }
                         } else {
@@ -290,7 +288,7 @@ var Lingo = {
                         if (success) {
                             //var actualWord = wordArray[(parseInt(Lingo.letters) * -1) - 1];
                             $('.lingo-current > td > div > div').each(function (k, selected) {
-                                $(selected).html(wordArray[k].toUpperCase());
+                                $(selected).html((wordArray[k].toUpperCase() === "|" ? "IJ" : wordArray[k].toUpperCase()));
                             });
                             Lingo.enterPressed = true;
                             Lingo.check();
