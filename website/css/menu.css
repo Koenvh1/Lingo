@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700&subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese');
+
+body {
+    font-family: "Roboto", sans-serif;
+    background-image: url(../img/background.png);
+    min-height: 100vh;
+}
+
+.menu-container {
+    background-color: #ffffff;
+    border-color: #f0f0f0;
+    border-style: solid;
+    border-width: 1px;
+}
+
+@media screen and (min-width: 800px) {
+    .menu-container {
+        width: 800px;
+        position: fixed;
+        top: 50px;
+        left: 50%;
+        /* bring your own prefixes */
+        transform: translateX(-50%);
+    }
+}
+
+.menu-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #f8f8f8;
+    border-color: #f0f0f0;
+    border-style: solid;
+    border-width: 0 0 2px 0;
+    width: 100%;
+    height: 110px;
+    padding: 5px;
+}
+
+.menu-header-small {
+    height: 50px !important;
+}
+
+.menu-row {
+    margin: 0;
+}
+
+.menu-new-game {
+    margin: 5px;
+}
+
+.menu-title {
+    margin: 10px;
+}
+
+.menu-center {
+    margin: 150px 0;
+    height: 100%;
+}
+
+.menu-opponent {
+    margin: 5px 10px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.menu-opponent > label {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 0 0 5px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.whitespace {
+    height: 10px;
+}

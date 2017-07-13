@@ -28,69 +28,64 @@ var Lingo = {
         });
 
         $(".lingo-letter > div").bind("input keyup", function (e) {
-            if(typeof e.keyCode === "undefined" || e.keyCode === 229) { //If mobile
-                var difference = getDifference(Lingo.previousContent, $(this).html().trim().toUpperCase()); //Get new character
-                if(difference.trim().length === 0 || $(this).html().trim().indexOf("<BR>") !== -1) {
-                    $(this).html(Lingo.previousContent);
-                } else {
-                    e.keyCode = difference.charCodeAt(0); //Set keycode from new character
+            if(!Lingo.enterPressed) {
+                if(typeof e.keyCode === "undefined" || e.keyCode === 229) { //If mobile
+                    var difference = getDifference(Lingo.previousContent, $(this).html().trim().toUpperCase()); //Get new character
+                    if(difference.trim().length === 0 || $(this).html().trim().indexOf("<BR>") !== -1) {
+                        $(this).html(Lingo.previousContent);
+                    } else {
+                        e.keyCode = difference.charCodeAt(0); //Set keycode from new character
+                    }
                 }
-            }
-            e.preventDefault();
-            //console.log("keyCode: " + e.keyCode);
-            var currentIndex = parseInt($(this).parent().parent().index()); //Get current square index in row
+                e.preventDefault();
+                //console.log("keyCode: " + e.keyCode);
+                var currentIndex = parseInt($(this).parent().parent().index()); //Get current square index in row
 
-            if (e.keyCode === 46) { //delete
-                $(this).html(".");
-            } else if (e.keyCode === 8) { //backspace
-                if($(this).html().trim() === "."){
-                    $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html(".").focus();
-                }
-                $(this).html(".");
-            } else if (e.keyCode === 74 && Lingo.language === "nl") { // j
-                if($(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html().trim() === "I"){
-                    $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html("IJ");
-                } else if ($(this).html().trim() === "I" && $(this).is(":last-child")) {
-                    $(this).html("IJ");
-                } else {
+                if (e.keyCode === 46) { //delete
+                    $(this).html(".");
+                } else if (e.keyCode === 8) { //backspace
+                    if($(this).html().trim() === "."){
+                        $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html(".").focus();
+                    }
+                    $(this).html(".");
+                } else if (e.keyCode === 74 && Lingo.language === "nl") { // j
+                    if($(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html().trim() === "I"){
+                        $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html("IJ");
+                        $(this).html(Lingo.previousContent);
+                    } else if ($(this).html().trim() === "I" && $(this).is(":last-child")) {
+                        $(this).html("IJ");
+                    } else {
+                        $(this).html(String.fromCharCode(e.keyCode));
+                        $(".lingo-current > td > .lingo-letter > div").eq(currentIndex + 1).focus();
+                    }
+                } else if (String.fromCharCode(e.keyCode).match(/[A-Z]/i)) {
                     $(this).html(String.fromCharCode(e.keyCode));
                     $(".lingo-current > td > .lingo-letter > div").eq(currentIndex + 1).focus();
-                }
-            } else if (String.fromCharCode(e.keyCode).match(/[A-Z]/i)) {
-                $(this).html(String.fromCharCode(e.keyCode));
-                $(".lingo-current > td > .lingo-letter > div").eq(currentIndex + 1).focus();
-            } else if (e.keyCode === 37) { //arrow left
-                $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).focus();
-            } else if (e.keyCode === 39) { //arrow right
-                $(".lingo-current > td > .lingo-letter > div").eq(currentIndex + 1).focus();
-            } else if (e.keyCode === 13) { //enter
-                if(!Lingo.enterPressed) {
+                } else if (e.keyCode === 37) { //arrow left
+                    $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).focus();
+                } else if (e.keyCode === 39) { //arrow right
+                    $(".lingo-current > td > .lingo-letter > div").eq(currentIndex + 1).focus();
+                } else if (e.keyCode === 13) { //enter
                     Lingo.enterPressed = true; //Prevent multiple enters firing
                     Lingo.check();
                 }
             }
         });
 
-        var audio = new Audio("./audio/newletter.mp3");
-        audio.play();
-
-        Lingo.nextGuess();
-        $('.lingo-current > td:first-child > div > div').focus();
-
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
             console.log("Mobile on");
             Lingo.mobile = true;
-            $("div[contenteditable=false]").prop("contenteditable", true); //Make editable for mobile keyboard
+            //$("div[contenteditable=false]").prop("contenteditable", true); //Make editable for mobile keyboard
 
-            var squareSize = (screen.width - ((parseInt(Lingo.letters) + 2) * 3)) / Lingo.letters; //Set width to screen width
+            var squareSize = ($(window).width() - ((parseInt(Lingo.letters) + 2) * 3)) / Lingo.letters; //Set width to screen width
             //console.log(squareSize);
-            Lingo.setSize(squareSize);
+            Lingo.setSize(Math.ceil(squareSize));
 
             //Fixed time bar to the top of the page
             $(".lingo-progress").css({
                 position: "fixed",
-                top: "0",
-                left: "0",
+                top: "50px",
+                left: $(".lingo").position().left,
             });
             $(".lingo").css({
                 "margin-top": $(".lingo-progress").outerHeight()
@@ -98,9 +93,15 @@ var Lingo = {
         }
 
         $(".lingo-progress").outerWidth($(".lingo").outerWidth());
+
+        //Start first guess
+        var audio = new Audio("./audio/newletter.mp3");
+        audio.play();
+        Lingo.nextGuess();
     },
 
     reset: function () {
+        Lingo.stopTimer();
         $(".lingo-letter > div").off("click").off("keydown").off("keyup").off("focus");
         $(".lingo > tbody > tr").html("");
         for(var i = 0; i < Lingo.letters; i++) {
@@ -130,12 +131,12 @@ var Lingo = {
         $('.lingo-current > td > div > div').each(function(i, selected){
             word[i] = $(selected).html().trim();
         });
-        $.post("play/check", { word: word.join(""), language: Lingo.language }, function (data) {
+        $.post(API_URL + "api/check", { word: word.join(""), language: Lingo.language }, function (data) {
             var json = JSON.parse(data);
             if(json.error !== null){
                 var audio = new Audio("./audio/timeup.mp3");
                 audio.play();
-                alert(json.error);
+                alert($(".lingo-doesNotExist").html().replace("%s", json.error));
             } else {
                 //Show state of each square, one by one, 220ms after each other
                 $('.lingo-current > td > div').each(function(i, selected){
@@ -200,8 +201,9 @@ var Lingo = {
             });
             if(Lingo.mobile) {
                 $("div[contenteditable=false]").prop("contenteditable", true);
+                $('.lingo-current > td > div > div').eq(0).blur(); //Make sure keyboard pops up
             }
-            $('.lingo-current > td > div > div').eq(0).focus(); //Focus first letter
+            $('.lingo-current > td > div > div').eq(0).trigger("click"); //Focus first letter
 
             Lingo.enterPressed = false; //Enable enter again
             Lingo.startTimer();
@@ -235,17 +237,17 @@ var Lingo = {
     nextWord: function (won) {
         var audio;
         if (won) {
+            $(".lingo-right-words").html(parseInt($(".lingo-right-words").html()) + 1);
             audio = new Audio("./audio/guesscorrect.mp3");
         } else {
             audio = new Audio("./audio/guessfail.mp3");
         }
         audio.play();
-        $.post("play/right", function (data) {
+        $.post(API_URL + "api/right", function (data) {
             var json = JSON.parse(data);
-            $(".lingo-end-message").html(json.title);
             $(".lingo-right").html(json.word);
             $("#overlay").css({
-                top: $(".lingo").offset().top,
+                top: $(".lingo").position().top,
                 left: "calc(50% - " + ($(".lingo").outerWidth() / 2) + "px)",
                 height: $(".lingo").outerHeight() + $(".lingo-progress").outerHeight()
             });
@@ -301,7 +303,7 @@ var Lingo = {
             // Start listening.
             annyang.start();
         } else {
-            alert("Voice control not available");
+            alert("Voice control not available. Only works on Google Chrome.");
         }
     },
 };

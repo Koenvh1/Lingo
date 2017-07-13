@@ -1,0 +1,16 @@
+{
+  "name": "Lingo",
+  "short_name": "Lingo",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#2C3E50",
+  "description": "The Lingo game.",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ]
+}

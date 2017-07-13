@@ -14,12 +14,13 @@ function parse($inputFile, $sane)
         while (($line = fgets($handle)) !== false) {
             $line = trim($line);
             echo $line . "\n";
-            if (strpos($line, "-") !== false || strpos($line, " ") !== false || strpos($line, "'") !== false || strpos($line, ".") !== false) {
+            if (strpos($line, "-") !== false || strpos($line, " ") !== false || strpos($line, "'") === 1 || strpos($line, ".") !== false) {
                 continue;
             }
             //if(count_capitals($line) < 2) {
             //    continue;
             //}
+            $line = str_replace("'", "", $line);
             $line = transliterateString($line);
 
             $lineCompare = str_replace("ij", "|", $line);

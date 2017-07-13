@@ -93,7 +93,7 @@ class LingoController
             }
 
         } else {
-            $resultArray["error"] = \L::game_doesNotExist($guess); //Can't find the word in database
+            $resultArray["error"] = $guess; //Can't find the word in database
         }
 
         if($rightWord == $guess){
@@ -114,8 +114,7 @@ class LingoController
     public function right(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         $resultArray = [
-            "word" => $_SESSION["word"],
-            "title" => \L::game_theRightWordIs
+            "word" => $_SESSION["word"]
         ];
         return $response->getBody()->write(json_encode($resultArray));
     }
@@ -130,11 +129,13 @@ class LingoController
      */
     public function init(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
+        $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+
         $language = $_POST["language"];
         $letters = $_POST["letters"];
 
         $database = new \Database();
-        $_SESSION["word"] = $database->getRandomWord($letters, $language); //"BIJTEND";
+        $_SESSION["word"] = $database->getRandomWord($letters, $language); //"LAGSA";
 
         $aidLetters = [];
         if($language == "nl") {

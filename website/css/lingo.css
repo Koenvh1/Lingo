@@ -53,6 +53,7 @@
 }
 
 .lingo-progress {
+    margin: 0 auto;
     background-color: #282828;
     border-color: #5d5d5d;
     border-width: 2px;
