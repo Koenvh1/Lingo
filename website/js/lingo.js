@@ -49,11 +49,11 @@ var Lingo = {
                     }
                     $(this).html(".");
                 } else if (e.keyCode === 74 && Lingo.language === "nl") { // j
-                    if($(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html().trim() === "I"){
+                    if (($(this).html().trim() === "I" || Lingo.previousContent === "I") && $(this).parent().parent().is(":last-child")) {
+                        $(this).html("IJ");
+                    } else if($(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html().trim() === "I"){
                         $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html("IJ");
                         $(this).html(Lingo.previousContent);
-                    } else if ($(this).html().trim() === "I" && $(this).is(":last-child")) {
-                        $(this).html("IJ");
                     } else {
                         $(this).html(String.fromCharCode(e.keyCode));
                         $(".lingo-current > td > .lingo-letter > div").eq(currentIndex + 1).focus();
@@ -76,20 +76,12 @@ var Lingo = {
             console.log("Mobile on");
             Lingo.mobile = true;
             //$("div[contenteditable=false]").prop("contenteditable", true); //Make editable for mobile keyboard
-
-            var squareSize = ($(window).width() - ((parseInt(Lingo.letters) + 2) * 3)) / Lingo.letters; //Set width to screen width
-            //console.log(squareSize);
-            Lingo.setSize(Math.ceil(squareSize));
-
-            //Fixed time bar to the top of the page
-            $(".lingo-progress").css({
-                position: "fixed",
-                top: "50px",
-                left: $(".lingo").position().left,
+            Lingo.setMobileSize();
+            /*
+            $(window).resize(function () {
+                Lingo.setMobileSize();
             });
-            $(".lingo").css({
-                "margin-top": $(".lingo-progress").outerHeight()
-            });
+            */
         }
 
         $(".lingo-progress").outerWidth($(".lingo").outerWidth());
@@ -98,6 +90,23 @@ var Lingo = {
         var audio = new Audio("./audio/newletter.mp3");
         audio.play();
         Lingo.nextGuess();
+    },
+
+    setMobileSize: function () {
+        var deviceWidth = $(window).width() > $(window).height() ? $(window).height() : $(window).width();
+        var squareSize = (deviceWidth - ((parseInt(Lingo.letters) + 2) * 3)) / Lingo.letters; //Set width to screen width
+        //console.log(squareSize);
+        Lingo.setSize(Math.ceil(squareSize));
+
+        //Fixed time bar to the top of the page
+        $(".lingo").css({
+            "margin-top": $(".lingo-progress").outerHeight() - 1
+        });
+        $(".lingo-progress").css({
+            position: "fixed",
+            top: "50px",
+            left: $(".lingo").offset().left
+        });
     },
 
     reset: function () {

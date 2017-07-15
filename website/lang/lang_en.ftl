@@ -1,9 +1,9 @@
 lang = en
 
 language = Language:
-dutch = Dutch
+dutch = Nederlands
 english = English
-german = German
+german = Deutsch
 
 letters = Letters:
 letters5 = 5 letters

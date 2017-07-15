@@ -2,8 +2,8 @@ lang = nl
 
 language = Taal:
 dutch = Nederlands
-english = Engels
-german = Duits
+english = English
+german = Deutsch
 
 letters = Letters:
 letters5 = 5 letters

@@ -1,8 +1,8 @@
 lang = de
 
 language = Sprache:
-dutch = Niederländisch
-english = Englisch
+dutch = Nederlands
+english = English
 german = Deutsch
 
 letters = Buchstaben:

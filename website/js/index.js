@@ -1,5 +1,5 @@
 function submitForm() {
-    Lingo.language = $("#lang").html().trim();//$("input[name=language]:checked").val();
+    Lingo.language = $("input[name=language]:checked").val();//$("input[name=language]:checked").val();
     Lingo.time = $("input[name=time]:checked").val();
     Lingo.letters = $("input[name=letters]:checked").val();
     if($("input[name=voice]").is(":checked")) {

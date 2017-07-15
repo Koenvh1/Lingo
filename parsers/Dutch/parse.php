@@ -14,7 +14,13 @@ function parse($inputFile, $sane)
         while (($line = fgets($handle)) !== false) {
             $line = trim($line);
             echo $line . "\n";
-            if (strpos($line, "-") !== false || strpos($line, " ") !== false || strpos($line, "'") === 1 || strpos($line, ".") !== false) {
+            if (
+                strpos($line, "-") !== false ||
+                strpos($line, " ") !== false ||
+                strpos($line, "'") !== false ||
+                strpos($line, ".") !== false ||
+                substr($line, 0, 1) !== strtolower(substr($line, 0, 1))
+            ) {
                 continue;
             }
             //if(count_capitals($line) < 2) {
