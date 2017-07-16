@@ -8,8 +8,7 @@ function parse($inputFile, $sane)
 {
     $handle = fopen($inputFile, "r");
 
-    $words5letter = [];
-    $words6letter = [];
+    $words = [];
     if ($handle) {
         while (($line = fgets($handle)) !== false) {
             $line = trim($line);
@@ -31,10 +30,8 @@ function parse($inputFile, $sane)
 
             $lineCompare = str_replace("ij", "|", $line);
             $lineCompare = str_replace("IJ", "|", $lineCompare);
-            if (strlen($lineCompare) == 5) {
-                $words5letter[] = strtoupper($line) . ",nl,5," . ($sane ? "1" : "0");
-            } elseif (strlen($lineCompare) == 6) {
-                $words6letter[] = strtoupper($line) . ",nl,6," . ($sane ? "1" : "0");
+            if (strlen($lineCompare) >= 5 && strlen($lineCompare) <= 10 && strlen($lineCompare) != 9) {
+                $words[] = strtoupper($line) . ",nl," . strlen($lineCompare) . "," . ($sane ? "1" : "0");
             }
         }
 
@@ -43,8 +40,7 @@ function parse($inputFile, $sane)
         // error opening the file.
     }
 
-    file_put_contents($inputFile . ".5letter.csv", implode("\r\n", $words5letter));
-    file_put_contents($inputFile . ".6letter.csv", implode("\r\n", $words6letter));
+    file_put_contents($inputFile . ".csv", implode("\r\n", $words));
 }
 
 function count_capitals($s)

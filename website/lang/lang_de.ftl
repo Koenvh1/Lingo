@@ -8,10 +8,15 @@ german = Deutsch
 letters = Buchstaben:
 letters5 = 5 Buchstaben
 letters6 = 6 Buchstaben
+letters7 = 7 Buchstaben
+letters8 = 8 Buchstaben
+letters10 = 10 Buchstaben
 
 aidLetters = Hilfbuchstaben:
 aidLetters1 = 1 Hilfbuchstabe
 aidLetters2 = 2 Hilfbuchstaben
+aidLetters3 = 3 Hilfbuchstaben
+aidLetters4 = 4 Hilfbuchstaben
 aidFirst = Erster Buchstabe immer gegeben
 
 time = Zeit:

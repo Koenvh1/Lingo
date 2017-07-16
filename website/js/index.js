@@ -7,6 +7,7 @@ function submitForm() {
     }
     $.post(API_URL + "api/init", {amount: $("input[name=aidLetters]:checked").val(), first: $("input[name=first]").is(":checked"), language: Lingo.language, letters: Lingo.letters}, function (data) {
         Lingo.rightLetters = JSON.parse(data);
+        Lingo.startLetters = JSON.parse(data);
         $("#menu").hide();
         $("#overlay").hide();
         $("#game").show();
@@ -14,9 +15,25 @@ function submitForm() {
     });
 }
 
-$("input[name=language]").click(function () {
-    var lang = $(this).val();
+function updateLanguage() {
+    var lang = $("input[name=language]:checked").val();
     document.l10n.requestLanguages([lang]);
+    if(lang === "en" || lang === "de") {
+        $("input[name=letters][value='7']").prop("disabled", true);
+        $("input[name=letters][value='8']").prop("disabled", true);
+        $("input[name=letters][value='10']").prop("disabled", true);
+        if(parseInt($("input[name=letters]:checked").val()) >= 7) {
+            $("input[name=letters][value='6']").prop("checked", true);
+        }
+    } else {
+        $("input[name=letters][value='7']").prop("disabled", false);
+        $("input[name=letters][value='8']").prop("disabled", false);
+        $("input[name=letters][value='10']").prop("disabled", false);
+    }
+}
+
+$("input[name=language]").click(function () {
+    updateLanguage();
 });
 
 $("input").change(function () {
@@ -44,6 +61,8 @@ $(document).ready(function () {
     if(localStorage.getItem("first") !== null) $("input[name=first]").prop("checked", localStorage.getItem("first") === "true");
     if(localStorage.getItem("time") !== null) $("input[name=time][value=" + localStorage.getItem("time") + "]").prop("checked", true);
     if(localStorage.getItem("voice") !== null) $("input[name=voice]").prop("checked", localStorage.getItem("voice") === "true");
+
+    updateLanguage();
 
     $(".splashscreen").fadeOut();
 });

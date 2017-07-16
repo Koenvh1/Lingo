@@ -8,10 +8,15 @@ german = Deutsch
 letters = Letters:
 letters5 = 5 letters
 letters6 = 6 letters
+letters7 = 7 letters
+letters8 = 8 letters
+letters10 = 10 letters
 
 aidLetters = Aid letters:
 aidLetters1 = 1 aid letter
 aidLetters2 = 2 aid letters
+aidLetters3 = 3 aid letters
+aidLetters4 = 4 aid letters
 aidFirst = First letter always given
 
 time = Time:

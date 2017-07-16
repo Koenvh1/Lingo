@@ -2,6 +2,7 @@ var Lingo = {
     language: "",
     time: 0,
     letters: 6,
+    startLetters: [],
     rightLetters: [],
     size: 50,
     mobile: false,
