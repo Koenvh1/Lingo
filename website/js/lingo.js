@@ -1,6 +1,7 @@
 var Lingo = {
     language: "",
     time: 0,
+    tries: 5,
     letters: 6,
     startLetters: [],
     rightLetters: [],
@@ -29,48 +30,58 @@ var Lingo = {
         });
 
         $(".lingo-letter > div").bind("input keyup", function (e) {
-            if(!Lingo.enterPressed) {
-                if(typeof e.keyCode === "undefined" || e.keyCode === 229) { //If mobile
-                    var difference = getDifference(Lingo.previousContent, $(this).html().trim().toUpperCase()); //Get new character
-                    if(difference.trim().length === 0 || $(this).html().trim().indexOf("<BR>") !== -1) {
-                        $(this).html(Lingo.previousContent);
-                    } else {
-                        e.keyCode = difference.charCodeAt(0); //Set keycode from new character
-                    }
+
+            if(typeof e.keyCode === "undefined" || e.keyCode === 229) { //If mobile
+                var difference = getDifference(Lingo.previousContent, $(this).html().trim().toUpperCase()); //Get new character
+                if(difference.trim().length === 0 || $(this).html().trim().indexOf("<BR>") !== -1) {
+                    $(this).html(Lingo.previousContent);
+                } else {
+                    e.keyCode = difference.charCodeAt(0); //Set keycode from new character
                 }
-                e.preventDefault();
+            }
+            e.preventDefault();
                 //console.log("keyCode: " + e.keyCode);
                 var currentIndex = parseInt($(this).parent().parent().index()); //Get current square index in row
 
                 if (e.keyCode === 46) { //delete
-                    $(this).html(".");
-                } else if (e.keyCode === 8) { //backspace
-                    if($(this).html().trim() === "."){
-                        $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html(".").focus();
+                    if(!Lingo.enterPressed) {
+                        $(this).html(".");
                     }
-                    $(this).html(".");
+                } else if (e.keyCode === 8) { //backspace
+                    if(!Lingo.enterPressed) {
+                        if ($(this).html().trim() === ".") {
+                            $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html(".").focus();
+                        }
+                        $(this).html(".");
+                    }
                 } else if (e.keyCode === 74 && Lingo.language === "nl") { // j
-                    if (($(this).html().trim() === "I" || Lingo.previousContent === "I") && $(this).parent().parent().is(":last-child")) {
-                        $(this).html("IJ");
-                    } else if($(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html().trim() === "I"){
-                        $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html("IJ");
-                        $(this).html(Lingo.previousContent);
-                    } else {
+                    if(!Lingo.enterPressed) {
+                        if (($(this).html().trim() === "I" || Lingo.previousContent === "I") && $(this).parent().parent().is(":last-child")) {
+                            $(this).html("IJ");
+                        } else if ($(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html().trim() === "I") {
+                            $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).html("IJ");
+                            $(this).html(Lingo.previousContent);
+                        } else {
+                            $(this).html(String.fromCharCode(e.keyCode));
+                            $(".lingo-current > td > .lingo-letter > div").eq(currentIndex + 1).focus();
+                        }
+                    }
+                } else if (String.fromCharCode(e.keyCode).match(/[A-Z]/i)) {
+                    if(!Lingo.enterPressed) {
                         $(this).html(String.fromCharCode(e.keyCode));
                         $(".lingo-current > td > .lingo-letter > div").eq(currentIndex + 1).focus();
                     }
-                } else if (String.fromCharCode(e.keyCode).match(/[A-Z]/i)) {
-                    $(this).html(String.fromCharCode(e.keyCode));
-                    $(".lingo-current > td > .lingo-letter > div").eq(currentIndex + 1).focus();
                 } else if (e.keyCode === 37) { //arrow left
                     $(".lingo-current > td > .lingo-letter > div").eq(currentIndex - 1).focus();
                 } else if (e.keyCode === 39) { //arrow right
                     $(".lingo-current > td > .lingo-letter > div").eq(currentIndex + 1).focus();
                 } else if (e.keyCode === 13) { //enter
-                    Lingo.enterPressed = true; //Prevent multiple enters firing
-                    Lingo.check();
+                    if(!Lingo.enterPressed) {
+                        $(this).blur();
+                        Lingo.enterPressed = true; //Prevent multiple enters firing
+                        Lingo.check();
+                    }
                 }
-            }
         });
 
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
@@ -113,7 +124,10 @@ var Lingo = {
     reset: function () {
         Lingo.stopTimer();
         $(".lingo-letter > div").off("click").off("keydown").off("keyup").off("focus");
-        $(".lingo > tbody > tr").html("");
+        $(".lingo > tbody").html("");
+        for(var i = 0; i < Lingo.tries; i++) {
+            $(".lingo > tbody").append("<tr></tr>");
+        }
         for(var i = 0; i < Lingo.letters; i++) {
             $(".lingo > tbody > tr").append("" +
                 "<td>" +

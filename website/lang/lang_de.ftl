@@ -26,6 +26,13 @@ sec30 = 30 sek
 min1 = 1 min
 unlimited = kein Zeitlimit
 
+tries = Versuche:
+tries4 = 4 Versuche
+tries5 = 5 Versuche
+tries6 = 6 Versuche
+tries7 = 7 Versuche
+tries10 = 10 Versuche
+
 voice = Spracherkennung aktivieren (experimentell)
 
 start = Start

@@ -26,6 +26,13 @@ sec30 = 30 sec
 min1 = 1 min
 unlimited = unlimited
 
+tries = Tries:
+tries4 = 4 tries
+tries5 = 5 tries
+tries6 = 6 tries
+tries7 = 7 tries
+tries10 = 10 tries
+
 voice = Activate voice control (experimental, only on Google Chrome)
 
 start = Start

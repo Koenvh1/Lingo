@@ -26,6 +26,13 @@ sec30 = 30 sec
 min1 = 1 min
 unlimited = onbeperkt
 
+tries = Pogingen:
+tries4 = 4 pogingen
+tries5 = 5 pogingen
+tries6 = 6 pogingen
+tries7 = 7 pogingen
+tries10 = 10 pogingen
+
 voice = Spraakherkenning activeren (experimenteel)
 
 start = Start

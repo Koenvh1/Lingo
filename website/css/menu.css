@@ -4,6 +4,7 @@ body {
     font-family: "Roboto", sans-serif;
     background-image: url(../img/background.png);
     min-height: 100vh;
+    overflow-y: auto;
 }
 
 .menu-container {
@@ -16,7 +17,7 @@ body {
 @media screen and (min-width: 800px) {
     .menu-container {
         width: 800px;
-        position: fixed;
+        position: absolute;
         top: 50px;
         left: 50%;
         /* bring your own prefixes */
