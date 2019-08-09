@@ -18,6 +18,7 @@ aidLetters2 = 2 aid letters
 aidLetters3 = 3 aid letters
 aidLetters4 = 4 aid letters
 aidFirst = First letter always given
+aidFirstLetter = Random
 
 time = Time:
 sec5 = 5 sec

@@ -18,6 +18,7 @@ aidLetters2 = 2 Hilfbuchstaben
 aidLetters3 = 3 Hilfbuchstaben
 aidLetters4 = 4 Hilfbuchstaben
 aidFirst = Erster Buchstabe immer gegeben
+aidFirstLetter = Zufällig
 
 time = Zeit:
 sec5 = 5 sek

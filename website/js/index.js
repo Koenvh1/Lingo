@@ -6,7 +6,7 @@ function submitForm() {
     if($("input[name=voice]").is(":checked")) {
         Lingo.activateVoice();
     }
-    $.post(API_URL + "api/init", {amount: $("input[name=aidLetters]:checked").val(), first: $("input[name=first]").is(":checked"), language: Lingo.language, letters: Lingo.letters}, function (data) {
+    $.post(API_URL + "api/init", {amount: $("input[name=aidLetters]:checked").val(), first: $("input[name=first]").is(":checked"), start: $("select[name=start]").val(), language: Lingo.language, letters: Lingo.letters}, function (data) {
         Lingo.rightLetters = JSON.parse(data);
         Lingo.startLetters = JSON.parse(data);
         $("#menu").hide();

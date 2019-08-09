@@ -2,6 +2,8 @@
     "require": {
         "slim/slim": "^3.8",
         "slim/php-view": "^2.2",
-        "philipp15b/php-i18n": "^3.0"
+        "philipp15b/php-i18n": "^3.0",
+        "ext-pdo": "*",
+        "ext-json": "*"
     }
 }

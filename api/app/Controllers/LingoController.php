@@ -135,7 +135,7 @@ class LingoController
         $letters = $_POST["letters"];
 
         $database = new \Database();
-        $_SESSION["word"] = $database->getRandomWord($letters, $language); //"LAGSA";
+        $_SESSION["word"] = $database->getRandomWord($letters, $language, isset($_POST["start"]) ? $_POST["start"] : "");
 
         $aidLetters = [];
         if($language == "nl") {

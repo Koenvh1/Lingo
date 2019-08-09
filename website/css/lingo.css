@@ -34,7 +34,7 @@
     height: 75px;
 }
 
-.lingo-letter > div:focus {
+.lingo-letter > div:focus, .lingo-focus {
     background-color: rgba(0, 0, 0, 0.4);
 }
 

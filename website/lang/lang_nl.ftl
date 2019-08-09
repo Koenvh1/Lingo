@@ -18,6 +18,7 @@ aidLetters2 = 2 hulpletters
 aidLetters3 = 3 hulpletters
 aidLetters4 = 4 hulpletters
 aidFirst = Eerste letter altijd gegeven
+aidFirstLetter = Willekeurig
 
 time = Tijd:
 sec5 = 5 sec
