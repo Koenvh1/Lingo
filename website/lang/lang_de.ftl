@@ -21,10 +21,10 @@ aidFirst = Erster Buchstabe immer gegeben
 aidFirstLetter = Zufällig
 
 time = Zeit:
-sec5 = 5 sek
-sec15 = 15 sek
-sec30 = 30 sek
-min1 = 1 min
+sec5 = 5 Sek
+sec15 = 15 Sek
+sec30 = 30 Sek
+min1 = 1 Min
 unlimited = kein Zeitlimit
 
 tries = Versuche:
