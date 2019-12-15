@@ -18,8 +18,7 @@ function parse($inputFile, $sane)
                 strpos($line, "-") !== false ||
                 strpos($line, " ") !== false ||
                 strpos($line, "'") !== false ||
-                strpos($line, ".") !== false ||
-                substr($line, 0, 1) !== strtolower(substr($line, 0, 1))
+                strpos($line, ".") !== false
             ) {
                 continue;
             }
