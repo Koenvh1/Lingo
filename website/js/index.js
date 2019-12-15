@@ -69,9 +69,19 @@ $(document).ready(function () {
     if(localStorage.getItem("first") !== null) $("input[name=first]").prop("checked", localStorage.getItem("first") === "true");
     if(localStorage.getItem("time") !== null) $("input[name=time][value=" + localStorage.getItem("time") + "]").prop("checked", true);
     if(localStorage.getItem("tries") !== null) $("input[name=tries][value=" + localStorage.getItem("tries") + "]").prop("checked", true);
-    if(localStorage.getItem("voice") !== null) $("input[name=voice]").prop("checked", localStorage.getItem("voice") === "true");
+    // if(localStorage.getItem("voice") !== null) $("input[name=voice]").prop("checked", localStorage.getItem("voice") === "true");
 
     updateLanguage();
 
     $(".splashscreen").fadeOut();
+
+    $("input[name=voice]").change(function () {
+        if ($("input[name=voice]").is(":checked")) {
+            Lingo.activateVoice();
+        } else {
+            if (annyang) {
+                annyang.abort();
+            }
+        }
+    });
 });

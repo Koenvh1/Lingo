@@ -34,7 +34,7 @@ tries6 = 6 Versuche
 tries7 = 7 Versuche
 tries10 = 10 Versuche
 
-voice = Spracherkennung aktivieren (experimentell)
+voice = Sprachsteuerung aktivieren (experimentell)
 
 start = Start
 
