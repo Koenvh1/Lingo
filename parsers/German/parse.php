@@ -25,13 +25,8 @@ function parse($inputFile, $sane)
             if (strpos($line, "-") !== false || strpos($line, " ") !== false || strpos($line, "'") !== false || strpos($line, ".") !== false) {
                 continue;
             }
-            //if(count_capitals($line) < 2) {
-            //    continue;
-            //}
             $line = transliterateString($line);
             $lineCompare = $line;
-            //$lineCompare = str_replace("ij", "|", $line);
-            //$lineCompare = str_replace("IJ", "|", $lineCompare);
             if (strlen($lineCompare) == 5) {
                 $words5letter[] = strtoupper($line) . ",de,5," . ($sane ? "1" : "0");
             } elseif (strlen($lineCompare) == 6) {
@@ -44,13 +39,7 @@ function parse($inputFile, $sane)
         // error opening the file.
     }
 
-    file_put_contents($inputFile . ".5letter.csv", implode("\r\n", $words5letter));
-    file_put_contents($inputFile . ".6letter.csv", implode("\r\n", $words6letter));
-}
-
-function count_capitals($s)
-{
-    return strlen(preg_replace('![^A-Z]+!', '', $s));
+    file_put_contents($inputFile . ".csv", implode("\r\n", array_merge($words5letter, $words6letter)));
 }
 
 function transliterateString($txt)
