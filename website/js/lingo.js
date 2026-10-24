@@ -153,14 +153,14 @@ var Lingo = {
 
         var word = []; //Get all squares and put them in an array
         $('.lingo-current > td > div > div').each(function(i, selected){
-            word[i] = $(selected).html().trim();
+            word[i] = $(selected).text().trim();
         });
         $.post(API_URL + "api/check", { word: word.join(""), language: Lingo.language }, function (data) {
             var json = JSON.parse(data);
             if(json.error !== null){
                 var audio = new Audio("./audio/timeup.mp3");
                 audio.play();
-                alert($(".lingo-doesNotExist").html().replace("%s", json.error));
+                alert($(".lingo-doesNotExist").text().replace("%s", json.error));
             } else {
                 //Show state of each square, one by one, 220ms after each other
                 $('.lingo-current > td > div').each(function(i, selected){
